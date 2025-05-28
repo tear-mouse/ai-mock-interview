@@ -1,0 +1,8 @@
+# requirements.txt
+Flask
+python-dotenv
+openai
+google-cloud-speech
+# 如果使用 Google Gemini
+# google-generativeai
+# 其他你可能用到的库
