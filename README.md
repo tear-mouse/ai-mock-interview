@@ -9,7 +9,7 @@
 >.venv\Scripts\activate
 
 ## 安装依赖包
->pip install -r requirements
+>pip install -r requirements.txt
 
 ## 运行
 >python app.py
