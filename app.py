@@ -7,10 +7,16 @@ from werkzeug.utils import secure_filename # 用于安全地处理上传文件�
 import openai # 确保导入 openai，因为 overall_analysis 直接使用了
 
 # 导入你的 API 调用模块
-from api_clients import llm_service, st_service # 修正: 应该是 stt_service
+from api_clients import llm_service, stt_service # <--- 修正这里的导入
 from api_clients import tts_service # 确保 tts_service 被导入
 
 load_dotenv()
+
+# 初始化 OpenAI 客户端 (如果 llm_service 等模块内部没有全局初始化)
+# 如果模块内部已经有 client = openai.OpenAI()，则这里不需要重复
+# 但为了确保 app.py 中直接调用 openai.chat.completions 的部分能工作，
+# 最好在这里也有一个 client 实例或确保 API key 已加载
+# openai_client = openai.OpenAI() # 如果需要直接在 app.py 中使用 client
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/' # 创建一个 uploads 文件夹存放临时音频
@@ -113,7 +119,7 @@ def submit_answer():
             print(f"  保存音频文件失败: {e_save}")
             return jsonify({"error": f"保存音频文件失败: {str(e_save)}"}), 500
 
-        transcribed_text = st_service.transcribe_audio(audio_file_path, language_code=language_preference) # 修正: 应该是 stt_service
+        transcribed_text = stt_service.transcribe_audio(audio_file_path, language_code=language_preference) # <--- 使用修正后的 stt_service
         
         if os.path.exists(audio_file_path):
             try:
